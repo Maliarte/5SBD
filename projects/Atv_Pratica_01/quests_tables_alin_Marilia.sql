@@ -1,14 +1,13 @@
 1️⃣ Liste todos os alunos matriculados no curso de "Banco de Dados".
-
-//c apelido:
+--c apelido:
 
 SELECT a.aluno_id, a.nome, a.email  -- Seleciona os dados do aluno
 FROM aluno a  
 JOIN matricula m ON a.aluno_id = m.aluno_id  -- Relaciona alunos com matrículas
 JOIN curso c ON m.curso_id = c.curso_id  -- Relaciona matrículas com cursos
 WHERE c.titulo = 'Banco de Dados';  -- Filtra pelo curso "Banco de Dados"
-//s apelido:
 
+--s apelido:
 SELECT aluno.aluno_id, aluno.nome, aluno.email  
 FROM aluno  
 JOIN matricula ON aluno.aluno_id = matricula.aluno_id  
@@ -17,7 +16,6 @@ WHERE curso.titulo = 'Banco de Dados';
 
 
 2️⃣ Liste todos os cursos com carga horária maior que 40 horas.
-
 
 SELECT * FROM curso WHERE carga_horaria > 40;  -- Filtra cursos com carga maior que 40h
 
@@ -31,8 +29,8 @@ WHERE m.nota IS NULL;  -- Filtra alunos que ainda não receberam nota
 
 
 4️⃣ Liste as matrículas realizadas depois do dia 01/01/2024.
-//A data precisa estar no formato correto para comparação no SQL.
-Correção:
+ 
+--A data deve estar no formato correto para comparação no SQL.
 
 SELECT *  
 FROM matricula  
@@ -41,7 +39,6 @@ WHERE data_matricula > TO_DATE('2024-01-01', 'YYYY-MM-DD');  -- Compara datas co
 
 
 5️⃣ Mostre os cursos com carga horária entre 30 e 60 horas.
-
 SELECT *  
 FROM curso  
 WHERE carga_horaria BETWEEN 30 AND 60;  -- Filtra cursos com carga entre 30 e 60h
@@ -89,7 +86,6 @@ HAVING COUNT(m.aluno_id) > 1;  -- Conta alunos matriculados e filtra os cursos c
 
 1️⃣1️⃣ Mostre todos os alunos sem matrícula em nenhum curso.
 
-
 SELECT a.nome  
 FROM aluno a  
 LEFT JOIN matricula m ON a.aluno_id = m.aluno_id  
@@ -117,7 +113,6 @@ GROUP BY a.nome;
 SELECT AVG(nota) AS media_geral  
 FROM matricula  
 WHERE nota IS NOT NULL;  -- Calcula a média das notas  
-
 
 
 
@@ -161,9 +156,9 @@ HAVING AVG(m.nota) >= 8.0;
 2️⃣0️⃣ Mostre a média, menor e maior nota por curso.
 
 SELECT c.titulo,  
-       AVG(m.nota) AS media_nota,  
-       MIN(m.nota) AS menor_nota,  
-       MAX(m.nota) AS maior_nota  
+AVG(m.nota) AS media_nota,  
+MIN(m.nota) AS menor_nota,  
+MAX(m.nota) AS maior_nota  
 FROM curso c  
 JOIN matricula m ON c.curso_id = m.curso_id  
 WHERE m.nota IS NOT NULL  
