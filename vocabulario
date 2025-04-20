@@ -1,0 +1,43 @@
+Definição | Palavra do Vocabulário
+
+
+Exibe dados de duas ou mais tabelas relacionadas. | View
+Um símbolo usado para executar uma operação em alguns valores. | Operador
+Uma implementação de um atributo ou relacionamento em uma tabela. | Coluna (ou Campo)
+Em SQL, o recurso que permite escolher as colunas de uma tabela a serem retornadas de uma consulta. | SELECT
+Um valor não disponível, não designado, desconhecido ou não aplicável. | NULL
+Renomeia um cabeçalho de coluna. | Alias
+Uma equação matemática. | Expressão
+Em SQL, o recurso que permite escolher as linhas de uma tabela retornadas de uma consulta. | WHERE
+Recupera informações do banco de dados. | Consulta (ou Query)
+Especifica as colunas a serem exibidas. | SELECT
+Especifica a tabela que contém a coluna listada na cláusula SELECT. | FROM
+Um comando SQL individual. | Comando (ou Instrução)
+Parte de uma instrução SQL. | Cláusula
+Uma combinação das duas cláusulas. | SELECT-FROM
+
+Tente/solucione
+Agora que você já tem um conhecimento básico de instruções SQL, é hora de colocar em prática o
+que aprendeu.
+1. Escreva uma instrução SQL que demonstre projeção.
+  
+  SELECT nome, email FROM clientes;
+
+  Esse comando é uma projeção, pois está projetando apenas duas colunas da tabela completa.
+
+2. Crie uma consulta que exiba o sobrenome e os endereços de e-mail de todas as pessoas da
+tabela d_client da DJs on Demand. Os cabeçalhos de coluna devem aparecer como “Client” e
+“Email Address”.
+
+  SELECT last_name AS "Client", email AS "Email Address"
+FROM d_client;
+
+
+  Usando alias para alterar os cabeçalhos de coluna (projeção com renomeação)
+  📌 Explicação rápida:
+
+SELECT last_name, email → escolhe as colunas.
+
+AS "Client" e AS "Email Address" → renomeia os cabeçalhos para algo mais amigável.
+
+FROM d_client → diz de qual tabela vem os dados.
