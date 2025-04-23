@@ -1,0 +1,228 @@
+Programação de Banco de Dados com SQL
+3-2: Classificando Linhas
+Atividades Práticas
+Objetivos
+• Criar uma consulta para classificar um conjunto de resultados em ordem crescente ou
+decrescente
+• Indicar a ordem em que as expressões são avaliadas e calculadas com base nas regras de
+precedência
+• Criar uma consulta para ordenar um conjunto de resultados usando um alias de coluna
+• Criar uma consulta para ordenar um conjunto de resultados em uma única ou em várias
+colunas
+
+Guia de Estudo SQL - Parte 2 (Exercícios 1 a 14)
+O uso da cláusula WHERE para limitar valores é um exemplo de:
+a. Projeção
+b. Ordenação
+c. Junção
+d. Agrupamento
+e. Seleção
+
+2. Você deseja classificar sua coleção de CDs por título e, depois, por artista. Para isso, você
+poderá usar:
+a. WHERE
+b. SELECT
+c. ORDER BY
+d. DISTINCT
+
+3. Quais das seguintes opções são palavras-chave SQL?
+a. SELECT
+b. ALIAS
+c. COLUMN
+d. FROM
+
+4. Quais das seguintes afirmativas são verdadeiras?
+a. A multiplicação e a divisão têm prioridade sobre a adição.
+b. Os operadores que têm a mesma prioridade são avaliados da esquerda para a direita.
+c. Os parênteses podem ser usados para substituir as regras de precedência.
+d. Nenhuma das opções acima.
+A consulta a seguir foi criada:
+SELECT DISTINCT last_name
+FROM students
+a. Para selecionar todos os alunos mais destacados
+b. Para escolher os sobrenomes duplicados
+c. Para selecionar os sobrenomes não duplicados
+d. Para selecionar todos os sobrenomes
+
+6.A string a seguir foi criada usando qual cláusula SELECT?
+Abby Rogers is an order taker for Global Fast Foods
+a. SELECT first_name ||' ' ||last_name ||' is an ' staff_type ' for Global Fast Foods'
+b. SELECT Abby Rogers is an ||staff_type||' for Global Fast Foods'
+c. SELECT first_name,last_name '||staff_type||' for Global Fast Foods'
+d. SELECT first_name ||' ' ||last_name ||' is an '||staff_type||' for Global Fast Foods'
+
+7. Quais das seguintes cláusulas SELECT retornarão cabeçalhos de coluna em letras maiúsculas?
+a. SELECT id, last_name, address, city, state, zip, phone_number;
+b. SELECT ID, LAST_NAME, ADDRESS, CITY, STATE, ZIP, PHONE_NUMBER;
+c. SELECT Id, Last_name, Address, City, State, Zip, Phone_number;
+d. SELECT id AS ID, last_name AS NAME, address AS ADDRESS, city AS CITY, state AS
+STATE, zip AS ZIP, phone_number AS PHONE_NUMBER;
+
+Qual instrução SELECT sempre retornará os sobrenomes em ordem alfabética?
+a. SELECT last_name AS ORDER BY FROM employees
+b. SELECT last_name FROM employees ORDER BY last_name
+c. SELECT last_name FROM employees
+d. SELECT ASC last_name FROM employees
+
+
+9. Qual cláusula SELECT retornará um cabeçalho de coluna chamado “New Employees”? para
+employee_id?
+a. SELECT last_name AS "New Employees"
+b. SELECT employee_id AS New Employees
+c. SELECT employee AS "New Employees"
+d. SELECT employee_id AS "New Employees"
+
+
+10.Examine a consulta a seguir:
+SELECT last_name, job_id, salary
+FROM employees
+WHERE job_id = 'SA_REP' OR job_id = 'AD_PRES' AND salary >15000;
+Quais resultados essa consulta não poderia retornar?
+a. Joe Everyone, sales representative, salary 15000
+b. Jane Hendricks, sales manager, salary 15500
+c. Arnie Smithers, administration president, 20000
+d. Jordan Lim, sales representative, salary 14000
+
+11.Conclua esta consulta para que ela retorne todos os funcionários cujos sobrenomes iniciam com
+“St”.
+SELECT last_name
+FROM employees
+
+12.Quais valores de salários essa consulta não retornará?
+SELECT last_name, first_name, salary
+FROM employees
+WHERE salary BETWEEN 1900 AND 2100;
+
+13.Corrija cada cláusula WHERE:
+a. WHERE department_id NOT IN 101,102,103;
+b. WHERE last_name = King
+c. WHERE start date LIKE "05-May-1998"
+d. WHERE salary IS BETWEEN 5000 AND 7000
+e. WHERE id =! 10
+
+
+14.SELECT prefixo
+ FROM phone
+ WHERE prefix BETWEEN 360 AND 425
+ OR prefix IN (206,253,625)
+ AND prefix BETWEEN 315 AND 620;
+Qual dos seguintes valores poderia ser retornado?
+625, 902, 410, 499
+
+
+====================================================================
+
+
+1. O uso da cláusula WHERE é um exemplo de:
+Resposta: e. Seleção
+Explicação: A cláusula WHERE seleciona linhas específicas de uma tabela com base em condições. 
+Isso representa a operação de seleção, pois está filtrando os registros.
+==========
+
+
+2. Classificar por título e artista:
+Resposta: c. ORDER BY
+Explicação: A cláusula ORDER BY é usada para ordenar os resultados por uma ou mais colunas. Neste caso, ORDER BY titulo, artista.
+==========
+
+
+
+3. Quais são palavras-chave SQL?
+Resposta correta: a. SELECT e d. FROM
+Explicação: SELECT e FROM são palavras reservadas do SQL. ALIAS é um conceito, mas não uma palavra-chave. COLUMN também não é uma palavra-chave SQL padrão.
+==========
+
+
+4. Afirmativas verdadeiras:
+Respostas:
+a. Verdadeiro — Multiplicação e divisão têm prioridade.
+b. Verdadeiro — Operadores com mesma prioridade são lidos da esquerda para a direita.
+c. Verdadeiro — Parênteses podem alterar a ordem de precedência.
+==========
+
+
+
+5. Sobre SELECT DISTINCT:
+Consulta:
+
+
+SELECT DISTINCT last_name FROM students;
+Resposta: c. Para selecionar os sobrenomes não duplicados
+Explicação: DISTINCT elimina valores duplicados na coluna especificada.
+==========
+
+6. String concatenada com SELECT:
+Resposta: d.
+
+
+SELECT first_name || ' ' || last_name || ' is an ' || staff_type || ' for Global Fast Foods';
+Explicação: Usa o operador || para concatenar strings no SQL.
+==========
+
+
+7. Cabeçalhos em letras maiúsculas:
+Respostas corretas: b e d
+Explicação: Os nomes dos cabeçalhos aparecem em maiúsculas quando escritos assim diretamente ou através de alias com AS.
+==========
+
+8. Sobrenomes em ordem alfabética:
+Resposta:
+
+
+SELECT last_name FROM employees ORDER BY last_name;
+==========
+
+
+9. Cabeçalho “New Employees” para employee_id:
+Resposta correta: SELECT employee_id AS "New Employees";
+==========
+
+
+10. Consulta com OR e AND:
+
+SELECT last_name, job_id, salary
+FROM employees
+WHERE job_id = 'SA_REP' OR job_id = 'AD_PRES' AND salary > 15000;
+Resposta correta: a. Joe Everyone, sales representative, salary 15000
+Explicação: AND tem precedência maior que OR. A condição job_id = 'AD_PRES' AND salary > 15000 é avaliada como um bloco.
+==========
+
+11. Consulta para sobrenomes iniciando com “St”:
+
+SELECT last_name
+FROM employees
+WHERE last_name LIKE 'St%';
+==========
+
+
+12. Valores que não serão retornados:
+
+SELECT last_name, first_name, salary
+FROM employees
+WHERE salary BETWEEN 1900 AND 2100;
+Salários não retornados: inferiores a 1900 e superiores a 2100, como 1850, 2200, etc.
+==========
+
+
+13. Correção das cláusulas WHERE:
+a.WHERE department_id NOT IN (101, 102, 103);
+b. WHERE last_name = 'King';
+c.WHERE start_date LIKE '05-May-1998';
+d.WHERE salary BETWEEN 5000 AND 7000;
+e.WHERE id != 10;
+==========
+
+
+14. Consulta com prefixo:
+
+SELECT prefix
+FROM phone
+WHERE prefix BETWEEN 360 AND 425
+   OR prefix IN (206, 253, 625)
+   AND prefix BETWEEN 315 AND 620;
+Valores possíveis retornados:
+✅ 625 — está no IN e também entre 315 e 620
+✅ 410 — está no intervalo 360 e 425
+❌ 902 — não atende nenhum critério
+❌ 499 — não está em IN e fora dos intervalos
+
