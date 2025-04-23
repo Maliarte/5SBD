@@ -83,3 +83,290 @@ Manipular dados no formato de data oferece uma série de vantagens operacionais:
 💰 Agendar faturamentos e cobranças de forma programada.
 
 📊 Monitorar KPIs temporais de forma precisa.
+
+
+Definição	Função Correspondente
+Uma função de data que retorna a data e a hora atuais do servidor do banco de dados.	- SYSDATE
+Adiciona meses do calendário à data	                                                  - ADD_MONTHS
+Último dia do mês	                                                                    - LAST_DAY
+Próximo dia da data especificada	                                                    - NEXT_DAY
+Número de meses entre duas datas determinadas	                                        - MONTHS_BETWEEN
+
+
+=====================================================================================================================
+
+📘 Estudo de Caso: Funções de Data em Oracle SQL
+
+1️⃣ Exibir número de meses entre o casamento de Vigil e hoje (arredondado)
+
+SELECT ROUND(MONTHS_BETWEEN(SYSDATE, event_date)) AS Months_Between
+FROM d_events
+WHERE client = 'Vigil' AND event_type = 'Wedding';
+
+📌 Função usada: MONTHS_BETWEEN
+
+🎯 Objetivo: Ver quantos meses se passaram desde o evento.
+
+
+
+---
+
+2️⃣ Dias entre início das férias de verão e início das aulas
+
+SELECT ROUND((TO_DATE('15-AUG-2024') - TO_DATE('01-JUL-2024')) * (30.5 / 30)) AS Days
+FROM dual;
+📌 Obs.: Considerou-se que as férias iniciaram em 1º de julho e aulas em 15 de agosto.
+🎯 Cálculo proporcional com base em 30,5 dias/mês.
+
+
+---
+
+3️⃣ Dias entre 1º de janeiro e 31 de dezembro
+
+SELECT TO_DATE('31-DEC-2024') - TO_DATE('01-JAN-2024') AS Days_In_Year
+FROM dual;
+
+🗓️ Retorno esperado: 365 (ou 366 em ano bissexto).
+
+---
+
+4️⃣ Arredonde e trunque a data de hoje para mês e ano
+
+SELECT 
+  ROUND(SYSDATE, 'MONTH') AS Rounded_Month,
+  TRUNC(SYSDATE, 'MONTH') AS Truncated_Month
+FROM dual;
+📌 Funções:
+
+ROUND(data, 'MONTH') aproxima para o mês mais próximo.
+
+TRUNC(data, 'MONTH') corta para o primeiro dia do mês.
+
+---
+
+5️⃣ Último dia de junho de 2005
+
+SELECT LAST_DAY(TO_DATE('01-JUN-2005')) AS Last_Day_June
+FROM dual;
+📅 Saída esperada: 30-JUN-2005
+
+---
+
+6️⃣ Anos desde nascimento de Bob Miller até hoje (arredondado)
+
+SELECT ROUND(MONTHS_BETWEEN(SYSDATE, birth_date)/12) AS Age
+FROM f_staffs
+WHERE first_name = 'Bob' AND last_name = 'Miller';
+🎯 Transforma meses em anos.
+
+---
+
+7️⃣ Consulta odontológica daqui a 6 meses
+
+SELECT ADD_MONTHS(SYSDATE, 6) AS Appointment
+FROM dual;
+📅 Resultado esperado: Data exata seis meses após hoje.
+
+
+---
+
+8️⃣ Último dia do mês atual (prazo da monografia)
+
+SELECT LAST_DAY(SYSDATE) AS Deadline
+FROM dual;
+📌 Usa LAST_DAY para retornar o final do mês atual.
+
+
+
+---
+
+9️⃣ Meses entre seu aniversário deste ano e 1º de janeiro do próximo
+
+
+SELECT MONTHS_BETWEEN(TO_DATE('01-JAN-2025'), TO_DATE('15-SEP-2024')) AS Months
+FROM dual;
+🗓️ Substitua 15-SEP-2024 pela sua data real de nascimento.
+
+
+---
+🔟 Próxima sexta-feira após seu aniversário
+
+SELECT NEXT_DAY(TO_DATE('15-SEP-2024'), 'FRIDAY') AS First_Friday
+FROM dual;
+
+📅 NEXT_DAY retorna o próximo dia útil indicado.
+
+
+----
+
+🔢 11. Função de data que retorna número
+MONTHS_BETWEEN(data1, data2)
+
+SYSDATE - outra_data
+
+📅 12. Função de data que retorna uma data
+SYSDATE
+
+ADD_MONTHS(data, n)
+
+LAST_DAY(data)
+
+NEXT_DAY(data, 'DAY')
+
+
+---
+
+🏢 13. Por que é importante manipular dados de data em empresas?
+Exemplo:
+
+"Empresas precisam prever prazos de entrega, aniversários de clientes, datas de renovação de contratos e 
+planejamento financeiro. Funções de data ajudam a automatizar esses processos, reduzindo erros e otimizando 
+a tomada de decisões."
+
+
+
+========================================================================================================================
+
+
+🧮 Exercício 1: Arredondar um número com duas casas decimais
+Enunciado: Usando a função DUAL, crie uma instrução que converterá 86.678 em 86.68.
+
+
+SELECT ROUND(86.678, 2) AS Arredondado
+FROM dual
+
+
+✅ Explicação:
+ROUND(número, casas_decimais): Arredonda o número para o número especificado de casas decimais.
+
+Aqui, 86.678 foi arredondado para duas casas, resultando em 86.68.
+
+DUAL é uma tabela especial do Oracle usada para selecionar valores sem acessar uma tabela real.
+
+
+---
+
+💿 Exercício 2: Exibir títulos dos CDs com IDs 90 e 91 em maiúsculas
+Enunciado: Crie uma instrução que exibirá os títulos dos CDs da DJs on Demand com números_cd 90 e 91 em maiúsculas, em uma coluna chamada “DJs on Demand Collections”.
+
+
+SELECT UPPER(title) AS "DJs on Demand Collections"
+FROM cds
+WHERE cd_number IN (90, 91);
+
+
+✅ Explicação:
+UPPER(texto): Converte uma string para letras maiúsculas.
+
+AS "DJs on Demand Collections": Define o alias (nome da coluna) para a saída.
+
+IN (90, 91): Seleciona os registros cujo cd_number é 90 ou 91.
+
+
+
+---
+
+
+🔐 3. Criar nomes de usuário no padrão "sobrenome em minúsculo + primeira letra do nome em maiúsculo"
+
+SELECT LOWER(last_name) || INITCAP(SUBSTR(first_name, 1, 1)) AS "User Passwords"
+FROM partners;
+🔎 Explicação:
+
+LOWER() coloca o sobrenome em minúsculo
+
+INITCAP(SUBSTR()) capitaliza a primeira letra do nome
+
+|| concatena os dois pedaços da string
+
+--
+🔠 4. Converter "It’s a small world" em "HELLO WORLD"
+
+SELECT 'HELLO WORLD' AS "Greeting"
+FROM dual;
+🔎 Aqui estamos substituindo completamente o conteúdo por uma string nova em maiúsculas.
+
+---
+
+🧹 5. Remover “fiddle” de “fiddledeedee” e “dum” de “fiddledeedum”
+
+SELECT REPLACE('fiddledeedee', 'fiddle', '') || REPLACE('fiddledeedum', 'dum', '') AS "Nonsense"
+FROM dual;
+🔎 Remove "fiddle" e "dum" e concatena os resultados, gerando "deedeefiddledee".
+
+
+---
+
+💲 6. Substituir todas as letras "i" em "Mississippi" por "$"
+
+SELECT REPLACE('Mississippi', 'i', '$') AS "Custom Replace"
+FROM dual;
+🔎 Substitui todas as ocorrências da letra “i” por “$”.
+
+---
+
+🧮 7. Arredondar 5332.342 para 5300sql
+Copiar
+Editar
+SELECT ROUND(5332.342, -2) AS "Rounded"
+FROM dual;
+🔎 ROUND(..., -2) arredonda para a centena mais próxima.
+
+---
+
+📏 8. Arredondar 3.14159 para 3.14
+
+SELECT ROUND(3.14159, 2) AS "Pi Rounded"
+FROM dual;
+
+---
+📏 9. Arredondar 73.892 para 73.8
+
+SELECT ROUND(73.892, 1) AS "Rounded"
+FROM dual;
+
+
+---
+
+📅 10. Próxima sexta-feira daqui a seis meses
+
+SELECT NEXT_DAY(ADD_MONTHS(SYSDATE, 6), 'FRIDAY') AS "Future"
+FROM dual;
+
+---
+📆 11. Data daqui a 10 anos
+
+SELECT ADD_MONTHS(SYSDATE, 120) AS "Future"
+FROM dual;
+🔎 10 anos = 120 meses
+---
+📅 12. Próximo ano bissexto após 2004 (exibir como 29-Feb-08)
+
+SELECT TO_DATE('29-FEB-2008', 'DD-MON-YYYY') AS "Future"
+FROM dual;
+
+
+----
+🎵 13. Encontrar temas com “ie” nos nomes
+
+SELECT theme_name
+FROM d_themes
+WHERE theme_name LIKE '%ie%';
+
+
+---
+
+📅 14. CDs lançados entre 2000 e 2003 (mostrar título e ano)
+
+SELECT title, release_year
+FROM cds
+WHERE release_year BETWEEN 2000 AND 2003;
+
+---
+
+🗓️ 15. IDs de funcionários contratados entre 01/01/1997 e hoje, em ordem decrescente de contratação
+
+SELECT employee_id, hire_date
+FROM employees
+WHERE hire_date BETWEEN TO_DATE('01-JAN-1997', 'DD-MON-YYYY') AND SYSDATE
+ORDER BY hire_date DESC;
