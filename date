@@ -16,12 +16,12 @@
 
 Função	                Descrição	                                          Tipo de Retorno
   
-MONTHS_BETWEEN	        Diferença entre duas datas, em meses	              Numérico
-ADD_MONTHS	            Adiciona uma quantidade de meses a uma data	        Data
-NEXT_DAY	              Retorna o próximo dia da semana especificado	      Data
-LAST_DAY	              Último dia do mês da data especificada	            Data
-ROUND	                  Arredonda a data para o mês/ano mais próximo	      Data
-TRUNC	                  Trunca a data para o início de mês/ano	            Data
+MONTHS_BETWEEN	        Diferença entre duas datas, em meses	              * Numérico
+ADD_MONTHS	            Adiciona uma quantidade de meses a uma data	        * Data
+NEXT_DAY	              Retorna o próximo dia da semana especificado	      * Data
+LAST_DAY	              Último dia do mês da data especificada	            * Data
+ROUND	                  Arredonda a data para o mês/ano mais próximo	      * Data
+TRUNC	                  Trunca a data para o início de mês/ano	            * Data
 
 =============
 
