@@ -1,0 +1,107 @@
+✅ 1. Criar e executar uma junção natural usando a sintaxe SQL ANSI-99
+
+A junção natural (NATURAL JOIN) combina linhas de duas tabelas com base em colunas com o mesmo nome e tipo de dados em ambas.
+-> Une duas tabelas com base no mesmo nome de coluna.
+
+🔍 Exemplo:
+
+SELECT *
+FROM employees
+NATURAL JOIN departments;
+
+
+🔸 Aqui, o Oracle irá identificar automaticamente a(s) coluna(s) com o mesmo nome (como department_id) 
+e realizará a junção com base nela(s).
+
+
+✅ 2. Criar uma junção cruzada (CROSS JOIN)
+
+A junção cruzada (CROSS JOIN) retorna o produto cartesiano entre duas tabelas, ou seja, todas as combinações possíveis entre as linhas de ambas as tabelas.
+
+🔍 Exemplo:
+ 
+SELECT *
+FROM employees
+CROSS JOIN job_grades;
+
+🔸 Se houver 100 funcionários e 5 faixas salariais, o resultado terá 500 linhas.
+
+
+📌 3. Por que um padrão ANSI para SQL é importante?
+ANSI (American National Standards Institute) define um conjunto de regras e sintaxes padronizadas para SQL, garantindo:
+
+🔄 Portabilidade: O mesmo código SQL pode ser executado em diferentes bancos de dados (Oracle, MySQL, PostgreSQL etc.).
+⚙️ Manutenção facilitada: Um padrão comum facilita a leitura e manutenção de código por equipes diferentes.
+📘 Documentação unificada: A padronização permite o uso de materiais de estudo e documentação consistentes.
+✅ Exemplo prático: Uma equipe desenvolve um sistema em Oracle e migra para PostgreSQL com mínimas alterações no SQL.
+
+🏢 4. Por que as empresas precisam combinar dados de várias fontes?
+Na prática, empresas utilizam diversos sistemas e bancos de dados: 
+CRM, ERP, folha de pagamento, BI, etc.
+
+🔍 Necessidades comuns:
+
+Integrar dados de vendas com dados financeiros para analisar lucratividade.
+Cruzar dados de RH com projetos ativos para alocar melhor os recursos humanos.
+Criar relatórios unificados com informações de múltiplos setores e origens.
+
+💼 Benefícios:
+🧠 Melhor tomada de decisão
+📊 Relatórios completos e atualizados
+🔐 Segurança e consistência de dados
+⏱️ Eficiência operacional
+💡 Exemplo: Cruzar a tabela clientes (CRM) com a pedidos (ERP) para identificar clientes inativos.
+
+
+====================
+
+1. Crie uma junção cruzada que exiba o sobrenome e o nome do departamento das tabelas
+funcionários e departamentos.
+2. Crie uma consulta que use uma junção natural para ingressar na tabela de departamentos e na
+tabela de localizações. Exibir o ID do departamento, o nome do departamento, o ID do local e a
+cidade.
+3. Crie uma consulta que use uma junção natural para ingressar na tabela de departamentos e na
+tabela de localizações. Restrinja a saída somente aos IDs de departamento 20 e 50. Exiba o id do
+departamento, o nome do departamento, o id do local e a cidade.
+
+
+
+🔁 1. Junção Cruzada entre Funcionários e Departamentos
+
+SELECT 
+    e.last_name AS "Sobrenome",
+    d.department_name AS "Nome do Departamento"
+FROM 
+    employees e
+CROSS JOIN 
+    departments d;
+🎯 Isso exibirá todas as combinações possíveis de sobrenomes dos funcionários com todos os nomes de departamentos (produto cartesiano).
+
+🔗 2. Junção Natural entre Departamentos e Localizações
+
+SELECT 
+    department_id,
+    department_name,
+    location_id,
+    city
+FROM 
+    departments
+NATURAL JOIN 
+    locations;
+🔍 Essa consulta retorna informações de departamentos e suas respectivas cidades, unindo as tabelas automaticamente com base em colunas de mesmo nome (location_id).
+
+🎯 3. Junção Natural com Filtro de IDs de Departamento (20 e 50)
+
+SELECT 
+    department_id,
+    department_name,
+    location_id,
+    city
+FROM 
+    departments
+NATURAL JOIN 
+    locations
+WHERE 
+    department_id IN (20, 50);
+
+✅ Aqui a junção é natural como no exercício anterior, mas com um filtro para exibir apenas os departamentos com IDs 20 e 50.
