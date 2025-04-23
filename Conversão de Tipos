@@ -1,0 +1,252 @@
+🧠 Objetivos de Estudo – Conversão de Tipos de Dados em SQL
+
+🎯 1. Conversão Explícita x Conversão Implícita
+
+✅ Conversão Explícita:
+Realizada manualmente pelo desenvolvedor usando funções específicas, como TO_CHAR, TO_DATE e TO_NUMBER.
+
+📌 Exemplo:
+
+SELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY') AS data_formatada
+FROM dual;
+
+
+✅ Conversão Implícita:
+Feita automaticamente pelo Oracle, quando detecta que os tipos de dados são compatíveis e precisam ser convertidos.
+
+📌 Exemplo:
+
+
+SELECT 'A data de hoje é: ' || SYSDATE
+FROM dual;
+Aqui, SYSDATE (tipo DATE) é convertido implicitamente para VARCHAR2 para concatenar com a string.
+
+
+---
+
+💼 2. Por que as conversões são importantes nos negócios?
+🔹 Permitem manipular, comparar e formatar dados de forma precisa.
+🔹 Ajudam a garantir integridade dos dados entre diferentes tipos (ex: texto x número x data).
+🔹 São essenciais em integrações com sistemas externos, geração de relatórios e inserção de dados.
+
+---
+🧪 3. Consultas SQL com TO_CHAR, TO_NUMBER e TO_DATE
+🔡 TO_CHAR (de número ou data → string)
+
+SELECT TO_CHAR(SYSDATE, 'Month DD, YYYY') AS data_formatada
+FROM dual;
+🔢 TO_NUMBER (de string → número)
+
+SELECT TO_NUMBER('1234.56') AS valor_numerico
+FROM dual;
+📅 TO_DATE (de string → data)
+
+SELECT TO_DATE('25/12/2025', 'DD/MM/YYYY') AS natal
+FROM dual;
+
+
+---
+📆 4. Aplicação de Modelos de Formato
+Exemplo com TO_CHAR(SYSDATE, 'MM/DD/YYYY'):
+
+SELECT TO_CHAR(SYSDATE, 'MM/DD/YYYY') AS formato_americano
+FROM dual;
+Modelos comuns:
+
+Modelo	                                                     Significado	                                             Exemplo
+DD	                                                                Dia	                                                    25
+MM	                                                                Mês (número)                                            12
+MONTH	                                                              Mês (nome por extenso)                             December
+YYYY	                                                              Ano com 4 dígitos	                                    2025
+RR	                                                                Ano com 2 dígitos flexível	                      25 (2025)
+HH24:MI:SS	                                                        Hora (formato 24h)	                               16:30:00
+
+---
+⏳ 5. Diferença entre YY e RR
+
+Código	                 Interpretação	                      Exemplo Entrada	                          Resultado
+YY	                    Converte 50 como 1950	                TO_DATE('50','YY')	                       01/01/1950
+RR	                    Flexível (20xx ou 19xx)	               TO_DATE('50','RR')	                       01/01/2050
+📌 Por que usar RR?
+Permite lidar com séculos diferentes de forma inteligente:
+
+Se você digitar '49' com RR, o Oracle entende como 2049.
+
+Se digitar '50', entende como 1950 (dependendo do ano atual).
+
+📚 Resumo Visual
+
+Função	                                                   Conversão	                                Exemplo
+TO_CHAR	                                                    Data/Número → Texto	                      TO_CHAR(SYSDATE, 'YYYY-MM')
+TO_DATE	                                                    Texto → Data	                            TO_DATE('2025', 'YYYY')
+TO_NUMBER	                                                  Texto → Número	                          TO_NUMBER('1234.56')
+
+
+
+==============================================================================================
+
+
+
+1. Listar sobrenomes e datas de nascimento dos funcionários da Global Fast Food, convertendo datas para formato "Month DD, YYYY"
+
+SELECT last_name, TO_CHAR(hire_date, 'Month DD, YYYY') AS birth_date
+FROM employees
+WHERE company = 'Global Fast Foods';
+
+
+Explicação: A função TO_CHAR é usada para formatar a data de nascimento, convertendo-a para o formato solicitado. 
+O formato 'Month DD, YYYY' exibe o nome do mês, o dia e o ano completos. Zeros à esquerda são automaticamente suprimidos.
+
+---
+
+2. Converter "January 3, 04" para o formato de data padrão (03-Jan-2004)
+
+SELECT TO_DATE('January 3, 04', 'Month DD, YY') AS formatted_date
+FROM dual;
+Explicação: A função TO_DATE converte o texto para uma data no formato especificado, usando 'Month DD, YY'. 
+O Oracle converte o ano '04' para 2004, e o formato padrão exibe a data como 03-Jan-2004.
+
+---
+
+3. Imprimir a start_date do código promocional 110 como: "The promotion began on the tenth of February 2004"
+
+SELECT 'The promotion began on the ' || TO_CHAR(start_date, 'DDth "of" Month YYYY') AS promotion_date
+FROM f_promotional_menus
+WHERE promo_code = 110;
+Explicação: A função TO_CHAR é utilizada para formatar a data como o número do dia seguido de "th", 
+o nome completo do mês e o ano completo.
+
+---
+
+
+4. Converter a data de hoje para o formato "Today is the Twentieth of March, Two Thousand Four"
+
+SELECT 'Today is the ' || TO_CHAR(SYSDATE, 'DDth "of" Month, YYYY') AS formatted_date
+FROM dual;
+Explicação: Aqui, usamos TO_CHAR para formatar a data atual. O formato 'DDth "of" Month, YYYY' 
+gera a data como "Today is the Twentieth of March, Two Thousand Four".
+
+
+
+
+---
+
+5. Listar o ID, nome e salário de todos os funcionários com salário formatado com $ e 2 casas decimais
+
+SELECT employee_id, first_name, last_name, 
+       TO_CHAR(salary, '$9999.99') AS formatted_salary
+FROM employees
+WHERE company = 'Global Fast Foods';
+
+
+
+Explicação: A função TO_CHAR formata o salário com o símbolo $ e 2 casas decimais. O formato '9999.99' garante que o número seja exibido com a quantidade adequada de casas decimais.
+
+
+
+
+---
+
+6. Exibir o salário atual e novo salário de Ellen Abel, com aumento de US$ 2.000
+
+SELECT first_name, last_name, 
+       TO_CHAR(salary, '$9999.99') AS current_salary, 
+       TO_CHAR(salary + 2000, '$9999.99') AS "New Salary"
+FROM employees
+WHERE first_name = 'Ellen' AND last_name = 'Abel';
+Explicação: O salário atual é exibido usando a função TO_CHAR. O novo salário é calculado somando 2000 e também formatado com o símbolo $ e 2 casas decimais.
+
+
+
+
+---
+
+7. Dia da semana e data da promoção especial do Dia dos Namorados com código 110
+
+SELECT TO_CHAR(start_date, 'Day, DDth Month YYYY') AS promotion_date
+FROM f_promotional_menus
+WHERE promo_code = 110;
+Explicação: Usamos TO_CHAR para formatar a data com o nome do dia da semana, o número do dia com "th", o nome completo do mês e o ano completo.
+
+
+
+
+---
+
+8. Converter "25-Dec-2004" em diferentes formatos de data
+
+-- December 25th, 2004
+SELECT TO_CHAR(TO_DATE('25-Dec-2004', 'DD-Mon-YYYY'), 'DDth Month, YYYY') AS formatted_date
+FROM dual;
+
+-- DECEMBER 25TH, 2004
+SELECT TO_CHAR(TO_DATE('25-Dec-2004', 'DD-Mon-YYYY'), 'UPPER(DDth Month, YYYY)') AS formatted_date
+FROM dual;
+
+-- 25th december, 2004
+SELECT TO_CHAR(TO_DATE('25-Dec-2004', 'DD-Mon-YYYY'), 'DDth "december", YYYY') AS formatted_date
+FROM dual;
+Explicação: Usamos a função TO_DATE para converter o texto em uma data e depois a função TO_CHAR para formatá-la de diferentes formas. O formato 'DDth Month, YYYY' é adaptado para cada versão.
+
+
+
+---
+
+
+9. Formatar os pacotes da DJs on Demand com faixas de custo no formato $2500.00
+
+SELECT TO_CHAR(min_cost, '$9999.99') AS "Min Cost", 
+       TO_CHAR(max_cost, '$9999.99') AS "Max Cost"
+FROM d_packages
+WHERE company = 'DJs on Demand';
+Explicação: A função TO_CHAR é utilizada para formatar as colunas min_cost e max_cost com o símbolo $ e duas casas decimais.
+
+
+
+---
+
+
+10. Converter "JUNE192004" em uma data usando o formato fx
+
+SELECT TO_DATE('JUNE192004', 'fx') AS formatted_date
+FROM dual;
+Explicação: O formato fx instrui o Oracle a tratar o valor de entrada exatamente como está, sem realizar modificações, o que garante que a data será interpretada corretamente.
+
+
+
+
+
+---
+
+
+11. Diferença entre conversão implícita e explícita de tipos de dados
+Conversão Implícita: O Oracle converte automaticamente os tipos de dados quando necessário, como quando você tenta comparar um número com uma string que pode ser convertida em número.
+
+📌 Exemplo: Comparando uma string numérica com um número.
+
+
+SELECT * FROM employees WHERE salary = '5000';
+
+Conversão Explícita: O desenvolvedor deve usar funções como TO_CHAR, TO_DATE ou TO_NUMBER para realizar a conversão de tipos de dados.
+
+📌 Exemplo: Convertendo uma string em número.
+
+SELECT TO_NUMBER('5000') FROM dual;
+
+
+---
+
+
+
+
+12. Por que as conversões de tipos de dados são importantes para os negócios?
+
+Manutenção da integridade dos dados: Permite manipular e comparar diferentes tipos de dados, 
+como texto, números e datas, sem erros.
+
+Integração de sistemas: Diferentes sistemas podem ter diferentes tipos de dados e formatos. 
+A conversão é essencial para integrar esses sistemas sem perda de dados ou erros de interpretação.
+
+Gerenciamento eficiente de dados: Facilita o tratamento de dados de maneira precisa e consistente, 
+essencial para gerar relatórios e tomar decisões estratégicas com base em dados financeiros, operacionais ou outros.
+
