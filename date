@@ -3,29 +3,29 @@
 🎯 Objetivos
 
 ✅ Entender e aplicar as principais funções de data de linha única no Oracle.
-
 ✅ Compreender como essas funções transformam valores.
-
 ✅ Utilizar operadores aritméticos com datas.
-
 ✅ Usar corretamente o SYSDATE.
-
 ✅ Reconhecer os benefícios da manipulação de dados no formato de data para as empresas.
+
+
 =========================
   
 
 🛠️ 1. Funções de Data de Linha Única
 
-Função	                Descrição	Tipo de Retorno
+Função	                Descrição	                                          Tipo de Retorno
   
-MONTHS_BETWEEN	        Diferença entre duas datas, em meses	Numérico
-ADD_MONTHS	            Adiciona uma quantidade de meses a uma data	Data
-NEXT_DAY	              Retorna o próximo dia da semana especificado	Data
-LAST_DAY	              Último dia do mês da data especificada	Data
-ROUND	                  Arredonda a data para o mês/ano mais próximo	Data
-TRUNC	                  Trunca a data para o início de mês/ano	Data
+MONTHS_BETWEEN	        Diferença entre duas datas, em meses	              Numérico
+ADD_MONTHS	            Adiciona uma quantidade de meses a uma data	        Data
+NEXT_DAY	              Retorna o próximo dia da semana especificado	      Data
+LAST_DAY	              Último dia do mês da data especificada	            Data
+ROUND	                  Arredonda a data para o mês/ano mais próximo	      Data
+TRUNC	                  Trunca a data para o início de mês/ano	            Data
 
 =============
+
+
 🧪 2. Exemplos de Uso
 
 -- Diferença de meses entre duas datas
