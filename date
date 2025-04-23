@@ -1,0 +1,85 @@
+📘 Guia Prático: Funções de Data no Oracle SQL
+  
+🎯 Objetivos
+
+✅ Entender e aplicar as principais funções de data de linha única no Oracle.
+
+✅ Compreender como essas funções transformam valores.
+
+✅ Utilizar operadores aritméticos com datas.
+
+✅ Usar corretamente o SYSDATE.
+
+✅ Reconhecer os benefícios da manipulação de dados no formato de data para as empresas.
+=========================
+  
+
+🛠️ 1. Funções de Data de Linha Única
+
+Função	                Descrição	Tipo de Retorno
+  
+MONTHS_BETWEEN	        Diferença entre duas datas, em meses	Numérico
+ADD_MONTHS	            Adiciona uma quantidade de meses a uma data	Data
+NEXT_DAY	              Retorna o próximo dia da semana especificado	Data
+LAST_DAY	              Último dia do mês da data especificada	Data
+ROUND	                  Arredonda a data para o mês/ano mais próximo	Data
+TRUNC	                  Trunca a data para o início de mês/ano	Data
+
+=============
+🧪 2. Exemplos de Uso
+
+-- Diferença de meses entre duas datas
+SELECT MONTHS_BETWEEN('01-MAR-2025', '01-JAN-2025') FROM dual; -- Resultado: 2
+
+-- Adicionando meses a uma data
+SELECT ADD_MONTHS(SYSDATE, 6) FROM dual;
+
+-- Próxima sexta-feira após hoje
+SELECT NEXT_DAY(SYSDATE, 'FRIDAY') FROM dual;
+
+-- Último dia do mês atual
+SELECT LAST_DAY(SYSDATE) FROM dual;
+
+-- Arredondando para o mês mais próximo
+SELECT ROUND(TO_DATE('15-MAR-2025'), 'MONTH') FROM dual;
+
+-- Truncando para o primeiro dia do mês
+SELECT TRUNC(SYSDATE, 'MONTH') FROM dual;
+
+==============
+  
+➗ 3. Operadores Aritméticos com Datas
+As datas podem ser manipuladas com números diretamente.
+
+
+Operação	Descrição
+SYSDATE + 30	Data daqui a 30 dias
+SYSDATE - 10	Data de 10 dias atrás
+end_date - start_date	Número de dias entre duas datas
+=============
+
+  
+⏳ 4. Utilização de SYSDATE
+  
+SYSDATE retorna a data e hora do servidor Oracle no momento da execução da consulta.
+
+-- Data e hora atuais
+SELECT SYSDATE FROM dual;
+
+-- Primeiro dia do ano atual
+  
+SELECT TRUNC(SYSDATE, 'YEAR') FROM dual;
+  
+💼 5. Benefícios para Empresas
+  
+Manipular dados no formato de data oferece uma série de vantagens operacionais:
+
+📅 Gerar relatórios automáticos de vencimentos e contratos.
+
+⏱ Analisar desempenho por períodos (mensal, trimestral, anual).
+
+📢 Emitir alertas e notificações baseadas em tempo.
+
+💰 Agendar faturamentos e cobranças de forma programada.
+
+📊 Monitorar KPIs temporais de forma precisa.
