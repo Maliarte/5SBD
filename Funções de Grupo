@@ -1,0 +1,319 @@
+## 📊 Funções de Grupo em SQL
+
+As **funções de grupo (ou funções agregadas)** permitem realizar cálculos em colunas de múltiplas linhas, retornando um único valor.
+
+---
+
+### ✅ 1. SUM (Soma)
+
+Retorna a **soma** dos valores em uma coluna numérica.
+
+```sql
+SELECT SUM(salario) AS total_salarios FROM funcionarios;
+```
+
+---
+
+### ✅ 2. AVG (Média)
+
+Retorna a **média aritmética** dos valores em uma coluna numérica.
+
+```sql
+SELECT AVG(salario) AS media_salarial FROM funcionarios;
+```
+
+---
+
+### ✅ 3. COUNT (Contagem)
+
+Conta o número de **linhas** ou de valores **não nulos** em uma coluna.
+
+```sql
+-- Conta todos os funcionários
+SELECT COUNT(*) AS total_funcionarios FROM funcionarios;
+
+-- Conta apenas os que têm bônus
+SELECT COUNT(bonus) AS com_bonus FROM funcionarios;
+```
+
+---
+
+### ✅ 4. MIN (Valor Mínimo)
+
+Retorna o **menor valor** de uma coluna.
+
+```sql
+SELECT MIN(salario) AS menor_salario FROM funcionarios;
+```
+
+---
+
+### ✅ 5. MAX (Valor Máximo)
+
+Retorna o **maior valor** de uma coluna.
+
+```sql
+SELECT MAX(salario) AS maior_salario FROM funcionarios;
+```
+
+---
+
+### ✅ 6. STDDEV (Desvio Padrão)
+
+Retorna o **desvio padrão** de uma coluna numérica.
+
+```sql
+SELECT STDDEV(salario) AS desvio_padrao_salario FROM funcionarios;
+```
+
+---
+
+### ✅ 7. VARIANCE (Variância)
+
+Retorna a **variância** dos valores em uma coluna numérica.
+
+```sql
+SELECT VARIANCE(salario) AS variancia_salario FROM funcionarios;
+```
+
+---
+
+## 🎯 Exemplo com todas as funções de grupo
+
+```sql
+SELECT 
+  COUNT(*) AS total_func,
+  SUM(salario) AS soma_salarios,
+  AVG(salario) AS media_salario,
+  MIN(salario) AS salario_minimo,
+  MAX(salario) AS salario_maximo,
+  STDDEV(salario) AS desvio_padrao,
+  VARIANCE(salario) AS variancia
+FROM funcionarios;
+```
+
+> ⚠️ As funções `SUM`, `AVG`, `STDDEV`, `VARIANCE` só operam com **colunas numéricas**.
+
+
+===
+
+## 📚 Vocabulário – Funções de Grupo SQL
+
+| Definição                                                                                   | Termo Correspondente        |
+|---------------------------------------------------------------------------------------------|-----------------------------|
+| Calcula o valor médio excluindo nulos                                                       | `AVG`                       |
+| Retorna o número de linhas com valores não nulos na expressão                               | `COUNT`                     |
+| Para dois conjuntos de dados com aproximadamente a mesma média, quanto maior a dispersão... | `STDDEV`                    |
+| Operam em conjuntos de linhas para fornecer um resultado por grupo                          | Funções de Grupo            |
+| Retorna um valor mínimo ignorando nulos                                                     | `MIN`                       |
+| Usada com colunas que armazenam dados numéricos para calcular a dispersão dos dados         | `VARIANCE`                  |
+| Calcula a soma ignorando valores nulos                                                      | `SUM`                       |
+| Retorna o valor máximo ignorando nulos                                                      | `MAX`                       |
+| Reunir em uma soma ou total                                                                 | `AGREGAR` ou `SUM`          |
+
+
+===========
+
+## 🎯 1. Definição e Exemplos das 7 Funções de Grupo
+
+| Função     | Definição                                                                 | Exemplo SQL                                                      |
+|------------|--------------------------------------------------------------------------|------------------------------------------------------------------|
+| `AVG`      | Retorna a média dos valores, ignorando nulos                            | `SELECT AVG(salario) FROM funcionarios;`                         |
+| `COUNT`    | Retorna o número de registros (não nulos, se uma coluna for usada)       | `SELECT COUNT(*) FROM eventos;`                                 |
+| `MAX`      | Retorna o valor máximo de uma coluna                                     | `SELECT MAX(custo) FROM eventos;`                               |
+| `MIN`      | Retorna o valor mínimo de uma coluna                                     | `SELECT MIN(custo) FROM eventos;`                               |
+| `STDDEV`   | Retorna o desvio padrão dos valores (variabilidade)                      | `SELECT STDDEV(salario) FROM funcionarios;`                      |
+| `SUM`      | Retorna a soma de todos os valores (ignorando nulos)                    | `SELECT SUM(custo) FROM eventos;`                               |
+| `VARIANCE` | Retorna a variância, ou seja, a dispersão dos dados em relação à média  | `SELECT VARIANCE(salario) FROM funcionarios;`                   |
+
+---
+
+## 📊 2. Consulta: Custo médio dos eventos (DJs on Demand)
+
+```sql
+SELECT ROUND(AVG(custo_evento), 2) AS "Custo Médio"
+FROM d_events;
+```
+
+---
+
+## 💼 3. Consulta: Média salarial dos membros da equipe cujo gerente tem ID 19 (Global Fast Foods)
+
+```sql
+SELECT AVG(salario) AS "Média Salarial"
+FROM funcionarios
+WHERE gerente_id = 19;
+```
+
+
+## 📊 4. Consulta: Soma dos salários dos membros das equipes com os IDs 12 e 9 (Global Fast Foods)
+
+```sql
+SELECT SUM(salario) AS "Soma dos Salários"
+FROM funcionarios
+WHERE equipe_id IN (12, 9);
+```
+
+---
+
+## 📅 5. Consulta: Menor salário, data de contratação mais recente, sobrenome da primeira e última pessoa na lista alfabética dos funcionários (Departamentos 50 ou 60)
+
+```sql
+SELECT MIN(salario) AS "Menor Salário", 
+       MAX(data_contratacao) AS "Data de Contratação mais Recente", 
+       (SELECT sobrenome FROM funcionarios WHERE ROWNUM = 1 ORDER BY sobrenome ASC) AS "Primeiro Funcionário", 
+       (SELECT sobrenome FROM funcionarios WHERE ROWNUM = 1 ORDER BY sobrenome DESC) AS "Último Funcionário"
+FROM funcionarios
+WHERE departamento_id IN (50, 60);
+```
+
+---
+
+## 📝 6. Consulta: Número de linhas retornadas pela soma de `total_sales` na tabela de pedidos
+
+A consulta:
+
+```sql
+SELECT sum(total_sales)
+FROM orders;
+```
+
+**Resposta**: A consulta retornará apenas **uma linha** com o valor da soma total das vendas. Não retornará o número de linhas, mas sim o valor da soma.
+
+---
+
+## 🚨 7. Relatório das médias salariais de funcionários pagos por hora
+
+A causa mais provável para a média salarial estar "muito acima" do esperado é que os funcionários pagos por hora estão sendo incluídos na média salarial sem que você tenha filtrado adequadamente os dados. Para corrigir isso, seria necessário:
+
+- Garantir que você exclua os funcionários pagos por hora, ou
+- Calcular separadamente a média salarial para os funcionários pagos por hora e os que recebem salário fixo.
+
+---
+
+## 📅 8. Consulta: Data mínima de nascimento dos funcionários (Global Fast Foods)
+
+```sql
+SELECT MIN(birthdate) 
+FROM funcionarios;
+```
+
+**Resposta**: A data mínima de nascimento será **30 de março de 1969**.
+
+---
+
+## 📅 9. Consulta: Média total de todos os pedidos da Global Fast Foods de 1º de janeiro de 2002 a 21 de dezembro de 2002
+
+```sql
+SELECT AVG(total_sales) AS "Média de Vendas"
+FROM orders
+WHERE order_date BETWEEN TO_DATE('2002-01-01', 'YYYY-MM-DD') 
+                      AND TO_DATE('2002-12-21', 'YYYY-MM-DD');
+```
+
+---
+
+## 📅 10. Consulta: Data de contratação do último funcionário contratado pela Oracle
+
+```sql
+SELECT MAX(data_contratacao) AS "Última Data de Contratação"
+FROM funcionarios
+WHERE empresa = 'Oracle';
+```
+
+---
+
+## 🔢 11. Consulta: Qual valor será maior: `SUM(operating_cost)` ou `AVG(operating_cost)`?
+
+**Resposta**: O valor retornado por `SUM(operating_cost)` será maior, pois ele retorna a soma total dos custos operacionais, enquanto `AVG(operating_cost)` retorna a média.
+
+---
+
+## 📊 12. Validade de consultas SQL em relação à tabela `D_EVENTS` da DJs on Demand:
+
+- **a. FROM event_date**: **Inválido**. `FROM` deve ser seguido por uma tabela ou subconsulta.
+- **b. SELECT SUM(cost)**: **Válido**. Isso soma a coluna `cost` de `D_EVENTS`.
+- **c. SELECT SUM(event_date)**: **Inválido**. Não faz sentido somar uma data.
+- **d. SELECT AVG(cost) AS "Expense"**: **Válido**. Isso calcula a média da coluna `cost`.
+- **e. WHERE MIN(id) = 100**: **Inválido**. `MIN()` não pode ser usado em uma condição `WHERE`.
+- **f. SELECT MAX(AVG(cost))**: **Inválido**. `MAX()` não pode ser usado em conjunto com `AVG()` sem uma subconsulta.
+- **g. SELECT MIN(event_date)**: **Válido**. Isso retorna a data mínima de `event_date`.
+
+
+
+========================
+| COUNT, DISTINCT, NVL |
+=======================
+
+
+📊 1. Criar e executar uma consulta SQL usando a função de grupo COUNT
+A função COUNT é usada para contar o número de linhas que atendem a um critério especificado. Aqui está um exemplo simples para contar o número de funcionários de uma empresa:
+
+
+SELECT COUNT(*) AS "Número de Funcionários"
+FROM funcionarios;
+Essa consulta retorna o número total de funcionários na tabela funcionarios.
+
+
+
+
+🔄 2. Usar DISTINCT e a função NVL com funções de grupo
+A função DISTINCT é usada para contar valores únicos, e NVL substitui valores nulos por um valor especificado. Aqui está um exemplo de como usá-los juntos:
+
+a. Exemplo com DISTINCT:
+
+SELECT COUNT(DISTINCT departamento_id) AS "Número de Departamentos Distintos"
+FROM funcionarios;
+Essa consulta retorna o número de departamentos distintos na tabela funcionarios.
+
+b. Exemplo com NVL:
+
+SELECT NVL(SUM(salario), 0) AS "Soma de Salários"
+FROM funcionarios;
+Aqui, a função NVL substitui qualquer soma nula de salários por 0. Se não houver salários na tabela ou todos os valores forem nulos, o resultado será 0 em vez de um valor nulo.
+
+c. Exemplo usando DISTINCT e NVL juntos:
+
+SELECT COUNT(DISTINCT NVL(departamento_id, 'Desconhecido')) AS "Departamentos Distintos (com valores nulos tratados)"
+FROM funcionarios;
+Nesta consulta, usamos o NVL para substituir qualquer valor nulo de departamento_id por 'Desconhecido' antes de contar os valores distintos.
+
+
+1. **Retorna o número de valores não nulos na coluna da expressão.**
+   - **COUNT**: A função `COUNT` retorna o número de valores não nulos na coluna especificada.
+
+2. **A palavra-chave usada para retornar somente valores não duplicados ou combinações de valores não duplicados em uma consulta.**
+   - **DISTINCT**: A palavra-chave `DISTINCT` é usada em uma consulta SQL para retornar apenas valores únicos (não duplicados).
+
+3. **Retorna o número de valores não nulos exclusivos na coluna da expressão.**
+   - **COUNT DISTINCT**: A combinação de `COUNT` com `DISTINCT` retorna o número de valores distintos não nulos na coluna especificada.
+
+
+=====================================================================
+1. Quantas músicas estão listadas na tabela D_SONGS da DJs on Demand?
+
+SELECT COUNT(*) 
+FROM D_SONGS;
+
+2. Em quantos tipos de locais diferentes a DJs on Demand teve eventos?
+
+SELECT COUNT(DISTINCT location_type) 
+FROM D_EVENTS;
+
+3. A tabela d_track_listings do banco de dados da DJs on Demand tem uma coluna chamada song_id e outra chamada cd_number. Quantos IDs de música e quantos números diferentes de CD existem na tabela?
+
+SELECT COUNT(DISTINCT song_id) AS unique_song_ids,
+       COUNT(DISTINCT cd_number) AS unique_cd_numbers
+FROM d_track_listings;
+
+4. Quantos clientes da DJs on Demand têm endereços de e-mail?
+
+SELECT COUNT(*) 
+FROM D_CUSTOMERS 
+WHERE email IS NOT NULL;
+
+5. Alguns dos parceiros da DJs on Demand não têm valores de despesas autorizados (auth_expense_amt). Quantos parceiros têm esse privilégio?
+
+SELECT COUNT(*) 
+FROM D_PARTNERS
+WHERE auth_expense_amt IS NULL;
