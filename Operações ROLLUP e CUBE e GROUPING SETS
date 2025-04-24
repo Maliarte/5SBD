@@ -1,0 +1,234 @@
+## Agrupamentos Avançados em SQL
+
+### 🔹 Usar `ROLLUP` para produzir subtotais
+
+O `ROLLUP` permite gerar subtotais e totais acumulados com base nos níveis de agrupamento especificados.
+
+#### Exemplo:
+```sql
+SELECT department_id, job_id, SUM(salary) AS total_salary
+FROM employees
+GROUP BY ROLLUP(department_id, job_id);
+
+
+## 📘 Vocabulário SQL - Agrupamentos Avançados
+
+### 1. Usado para criar subtotais que envolvem desde o nível mais detalhado até um total geral, seguindo uma lista de agrupamento especificada na cláusula
+
+**Resposta:** `ROLLUP`
+
+---
+
+### 2. Uma extensão da cláusula GROUP BY semelhante a ROLLUP que produz relatórios de tabulação cruzada
+
+**Resposta:** `CUBE`
+
+---
+
+### 3. Usado para especificar vários agrupamentos de dados
+
+**Resposta:** `GROUPING SETS`
+
+
+# Consultas SQL com ROLLUP, CUBE e GROUPING SETS
+
+---
+
+## 1. Salário total por `manager_id` e `job_id` com subtotais por gerente e total geral
+
+```sql
+SELECT manager_id, job_id, SUM(salary) AS total_salary
+FROM employees
+GROUP BY ROLLUP(manager_id, job_id);
+✅ Explicação:
+ROLLUP(manager_id, job_id) agrupa os dados por manager_id e job_id, incluindo subtotais por manager_id e um total geral de todos os salários.
+
+2. Salário total por manager_id e job_id com subtotais por gerente, por cargo e total geral
+
+SELECT manager_id, job_id, SUM(salary) AS total_salary
+FROM employees
+GROUP BY CUBE(manager_id, job_id);
+✅ Explicação:
+CUBE(manager_id, job_id) produz todas as combinações possíveis entre manager_id e job_id, retornando:
+
+Totais por manager_id (independente do job_id)
+
+Totais por job_id (independente do manager_id)
+
+Totais por cada par (manager_id, job_id)
+
+Total geral
+
+3. Consulta usando GROUPING SETS para diferentes níveis de agrupamento
+
+SELECT department_id, manager_id, job_id, SUM(salary) AS total_salary
+FROM employees
+GROUP BY GROUPING SETS (
+  (department_id, manager_id, job_id),
+  (manager_id, job_id),
+  (department_id, manager_id)
+);
+✅ Explicação:
+GROUPING SETS permite definir múltiplos agrupamentos personalizados em uma única consulta.
+
+Os resultados incluem:
+
+Salário total por departamento, gerente e cargo.
+
+Salário total por gerente e cargo (independente do departamento).
+
+Salário total por departamento e gerente (independente do cargo).
+
+===================
+
+# Operadores SET em SQL
+
+## ✅ Definição e Finalidade
+
+Os **operadores SET** em SQL são utilizados para **combinar os resultados de duas ou mais consultas SELECT** em um único conjunto de resultados. São úteis quando você deseja recuperar dados de diferentes tabelas ou consultas separadas, mas apresentá-los em um único resultado unificado.
+
+---
+
+## ✅ Principais Operadores SET
+
+### 1. `UNION`
+- **Finalidade:** Combina os resultados de duas consultas e **remove duplicatas**.
+- **Exemplo:**
+  ```sql
+  SELECT city FROM customers
+  UNION
+  SELECT city FROM suppliers;
+2. UNION ALL
+Finalidade: Combina os resultados de duas consultas e mantém duplicatas.
+
+Exemplo:
+
+
+SELECT city FROM customers
+UNION ALL
+SELECT city FROM suppliers;
+
+3. INTERSECT
+Finalidade: Retorna apenas os valores comuns a ambas as consultas.
+
+Exemplo:
+
+
+SELECT city FROM customers
+INTERSECT
+SELECT city FROM suppliers;
+4. MINUS (Oracle) ou EXCEPT (SQL Server/PostgreSQL)
+Finalidade: Retorna os registros da primeira consulta que não estão na segunda.
+
+Exemplo:
+
+SELECT city FROM customers
+MINUS
+SELECT city FROM suppliers;
+
+✅ Regras para uso dos operadores SET
+As consultas combinadas devem ter o mesmo número de colunas e colunas compatíveis em tipo de dados.
+
+Os nomes das colunas no resultado final são determinados pela primeira consulta.
+
+Para aplicar ORDER BY, use somente na última consulta.
+
+Exemplo com ORDER BY:
+
+SELECT name FROM employees
+UNION
+SELECT name FROM managers
+ORDER BY name;
+✅ Quando usar cada operador?
+
+Operador	                Usa duplicatas?	          Objetivo
+UNION	                    ❌ Não	                  Mesclar dados diferentes, sem repetição
+UNION ALL	                ✅ Sim	                  Mesclar dados com repetição permitida
+INTERSECT	                ❌ Não	                  Filtrar dados comuns
+MINUS/EXCEPT	            ❌ Não	                  Excluir registros da segunda consulta
+
+
+
+# 📘 Vocabulário: Operadores SET e Termos Relacionados
+
+Abaixo estão os termos correspondentes às definições fornecidas:
+
+---
+
+**Definição:** Um operador que retorna todas as linhas de ambas as tabelas e elimina as duplicadas  
+**👉 Resposta:** `UNION`
+
+---
+
+**Definição:** Colunas criadas para corresponder a consultas em outra tabela que não estão em ambas as tabelas  
+**👉 Resposta:** `OUTER JOIN` *(apesar de "colunas" ser mencionado, o termo adequado nesse contexto é sobre junção externa que lida com dados faltantes)*
+
+---
+
+**Definição:** Um operador que retorna todas as linhas de ambas as tabelas, incluindo as duplicadas  
+**👉 Resposta:** `UNION ALL`
+
+---
+
+**Definição:** Usados para combinar os resultados de várias instruções SELECT em um único resultado  
+**👉 Resposta:** `Operadores SET` (como UNION, UNION ALL, INTERSECT, MINUS)
+
+---
+
+**Definição:** Um operador que retorna as linhas exclusivas de cada tabela  
+**👉 Resposta:** `MINUS` (no Oracle) ou `EXCEPT` (em outros bancos)
+
+---
+
+**Definição:** Um operador que retorna as linhas comuns a ambas as tabelas  
+**👉 Resposta:** `INTERSECT`
+
+
+==============
+
+
+# 📘 Operadores SET e Consultas Combinadas
+
+## 1. Quais são os diversos operadores SET?
+
+- `UNION`: Combina os resultados de duas consultas e elimina duplicatas.
+- `UNION ALL`: Combina os resultados de duas consultas e **mantém duplicatas**.
+- `INTERSECT`: Retorna apenas as linhas que estão presentes **em ambas** as consultas.
+- `MINUS` (Oracle) ou `EXCEPT` (outros bancos): Retorna as linhas que estão na **primeira consulta, mas não na segunda**.
+
+---
+
+## 2. Consulta que retorna dados combinados de `employees` e `job_history` (sem duplicatas)
+
+```sql
+SELECT employee_id, job_id, hire_date, department_id
+FROM employees
+
+UNION
+
+SELECT employee_id, job_id, start_date, department_id
+FROM job_history;
+
+
+
+3. Consulta modificada para manter as duplicatas usando UNION ALL e ordenação por employee_id
+
+SELECT employee_id, job_id, hire_date, department_id
+FROM employees
+
+UNION ALL
+
+SELECT employee_id, job_id, start_date, department_id
+FROM job_history
+ORDER BY employee_id;
+
+📝 Quantas linhas extras foram retornadas?
+Para descobrir, compare o total de linhas da consulta com UNION e com UNION ALL.
+As linhas extras são aquelas que aparecem repetidas nos dois conjuntos de dados.
+
+4. Consulta para listar funcionários que nunca mudaram de cargo
+
+SELECT employee_id, first_name, last_name
+FROM employees
+WHERE employee_id NOT IN (SELECT employee_id FROM job_history);
+📝 Essa consulta retorna os funcionários que não estão presentes na tabela job_history, ou seja, nunca tiveram mudança de cargo registrada.
