@@ -1,0 +1,72 @@
+🌿 Autojunção e Consultas Hierárquicas no Oracle SQL
+
+🔁 1. Autojunção
+A autojunção é quando uma tabela é unida com ela mesma — útil, por exemplo, para mostrar relações entre funcionários e gerentes.
+
+🧪 Exemplo:
+
+SELECT e.nome AS Empregado,
+       m.nome AS Gerente
+FROM funcionarios e
+JOIN funcionarios m
+ON e.id_gerente = m.id_func;
+
+📌 Aqui, a tabela funcionarios é usada duas vezes:
+
+e representa os empregados
+
+m representa os gerentes
+
+🌳 2. Consulta Hierárquica
+Usada quando queremos representar estruturas de níveis (ex: organogramas, categorias de produtos, pastas, etc).
+
+✅ Sintaxe:
+
+SELECT nome, id_func, id_gerente
+FROM funcionarios
+START WITH id_gerente IS NULL
+CONNECT BY PRIOR id_func = id_gerente;
+
+🔹 START WITH: define a raiz da hierarquia
+🔹 CONNECT BY: define a relação entre os níveis
+🔹 PRIOR: define qual lado da relação representa o nível anterior
+
+📋 3. Relatório Estruturado em Árvore
+Você pode formatar a saída com indentação pra parecer uma árvore!
+
+💡 Exemplo com indentação:
+
+SELECT LPAD(' ', LEVEL * 2) || nome AS Estrutura
+FROM funcionarios
+START WITH id_gerente IS NULL
+CONNECT BY PRIOR id_func = id_gerente;
+🔸 LEVEL representa o nível hierárquico
+🔸 LPAD ajuda a formatar com espaços conforme o nível
+
+✂️ 4. Excluir Ramificações da Árvore
+Use a cláusula WHERE com CONNECT_BY_ISLEAF, LEVEL, ou filtros específicos:
+
+🛑 Excluir galhos a partir de certo gerente:
+
+SELECT nome
+FROM funcionarios
+START WITH id_gerente IS NULL
+CONNECT BY PRIOR id_func = id_gerente
+AND id_func != 3; -- exclui a ramificação do gerente com id 3
+
+
+✅ Mostrar só "folhas" (sem subordinados):
+
+SELECT nome
+FROM funcionarios
+START WITH id_gerente IS NULL
+CONNECT BY PRIOR id_func = id_gerente
+HAVING CONNECT_BY_ISLEAF = 1;
+
+
+✅ Dica bônus: ver a profundidade da árvore
+
+SELECT nome, LEVEL AS nivel_hierarquico
+FROM funcionarios
+START WITH id_gerente IS NULL
+CONNECT BY PRIOR id_func = id_gerente;
