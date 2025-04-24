@@ -1,0 +1,236 @@
+## Junções em Oracle SQL vs SQL ANSI/ISO:1999
+
+### Tipos de Junção e Suas Sintaxes
+
+| Tipo de Junção              | Sintaxe Oracle Proprietária        | Sintaxe ANSI/ISO SQL:1999               |
+|-----------------------------|-------------------------------------|-----------------------------------------|
+| Equijunção                  | WHERE t1.coluna = t2.coluna         | JOIN t2 ON t1.coluna = t2.coluna        |
+| Junção externa esquerda     | t1.coluna = t2.coluna(+)            | LEFT OUTER JOIN t2 ON ...               |
+| Junção externa direita      | t1.coluna(+) = t2.coluna            | RIGHT OUTER JOIN t2 ON ...              |
+| Junção interna              | WHERE t1.coluna = t2.coluna         | INNER JOIN t2 ON t1.coluna = t2.coluna  |
+| Junção externa completa     | (não suportado diretamente)         | FULL OUTER JOIN t2 ON ...               |
+| Junção cruzada              | FROM t1, t2                         | CROSS JOIN t2                           |
+| Autojunção                  | FROM t1 a, t1 b                     | JOIN t1 b ON a.coluna = b.coluna        |
+
+---
+
+## 🧠 Finalidade das Condições de Junção
+
+As condições de junção servem para:
+- Combinar dados de várias tabelas relacionadas
+- Controlar os registros exibidos na saída
+- Evitar produtos cartesianos (todas as combinações possíveis entre linhas de tabelas)
+
+---
+
+## 🧪 Produto Cartesiano (sem condição de junção)
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e, departamentos d;
+```
+> ❗ Retorna todos os funcionários combinados com todos os departamentos.
+
+---
+
+## ✅ Equijunção
+
+### 🔷 Sintaxe Oracle
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e, departamentos d
+WHERE e.id_depart = d.id_depart;
+```
+
+### 🔶 Sintaxe ANSI
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e
+JOIN departamentos d ON e.id_depart = d.id_depart;
+```
+
+---
+
+## ➕ Junção com Condições Extras (AND)
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e
+JOIN departamentos d ON e.id_depart = d.id_depart
+WHERE d.localizacao = 'São Paulo'
+AND e.salario > 3000;
+```
+
+---
+
+## 🏷️ Uso de Aliases em Junções
+
+```sql
+SELECT f.nome AS Funcionario, d.nome_depart AS Departamento
+FROM funcionarios f
+JOIN departamentos d ON f.id_depart = d.id_depart;
+```
+
+- Use aliases curtos para tabelas (`f`, `d`) e nomes descritivos para colunas.
+- Melhora a legibilidade e facilita manutenção da consulta.
+
+---
+
+## 🔁 Junções Avançadas em SQL Oracle
+
+---
+
+## 🚫 Não Equijunção
+
+A **não equijunção** é usada quando a relação entre colunas não depende de igualdade. Por exemplo, pode-se utilizar operadores como `<`, `>`, `BETWEEN`, etc.
+
+### 🔷 Exemplo: Faixa salarial
+
+```sql
+SELECT e.nome, s.faixa_salarial
+FROM funcionarios e, faixas_salarial s
+WHERE e.salario BETWEEN s.salario_min AND s.salario_max;
+```
+
+> 🔎 Aqui não usamos `=` para relacionar as tabelas, mas sim `BETWEEN`.
+
+---
+
+## 🔄 Junção Externa (Oracle Proprietária)
+
+A junção externa permite retornar registros mesmo quando não há correspondência em outra tabela.
+
+### 🔹 Junção externa esquerda (LEFT JOIN)
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e, departamentos d
+WHERE e.id_depart = d.id_depart(+);
+```
+
+- Retorna **todos os funcionários**, mesmo que não estejam associados a um departamento.
+
+---
+
+### 🔸 Junção externa direita (RIGHT JOIN)
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e, departamentos d
+WHERE e.id_depart(+) = d.id_depart;
+```
+
+- Retorna **todos os departamentos**, mesmo que não tenham funcionários.
+
+> ⚠️ As junções externas com `(+)` são específicas do Oracle. Para maior portabilidade, prefira a sintaxe ANSI.
+
+---
+
+### ✅ Dica: Substituindo por ANSI (boa prática)
+
+```sql
+SELECT e.nome, d.nome_depart
+FROM funcionarios e
+LEFT OUTER JOIN departamentos d ON e.id_depart = d.id_depart;
+```
+
+---
+
+## 📘 Observações
+
+- A cláusula `(+)` sempre vai na **tabela que pode ter valores nulos** (lado opcional).
+- Em ambientes modernos e multiplataforma, **prefira ANSI SQL** para maior compatibilidade e clareza.
+
+
+
+
+======================
+
+
+## 🔗 Junções, Não Equijunções e Boas Práticas com SQL
+1. Crie uma junção com base no custo do evento entre as tabelas D_EVENTS e D_PACKAGES da
+DJs on Demand. Exiba o nome e o código de cada evento.
+2. Usando o banco de dados Oracle, crie uma consulta que retorne o sobrenome, o salário e o nível
+do cargo dos funcionários com base no salário. Selecione o salário entre a faixa salarial mínima e
+máxima.
+3. Qual condição requer a criação de uma não equijunção?
+4. Reescreva a instrução de não equijunção a seguir usando os operadores lógicos de condição
+(AND, OR, NOT): WHERE a.ranking BETWEEN g.lowest_rank AND g.highest_rank
+5. Como você sabe quando um alias de tabela deve ou não ser usado?
+6. Qual tipo de junção você usaria para encontrar dados entre uma faixa de números?
+7. Você precisa produzir para a Global Fast Foods um relatório que mostre os clientes e os pedidos.
+Um cliente deverá ser incluído no relatório mesmo se não houver pedidos para ele.
+---
+
+### 1️⃣ Junção com base no custo entre `D_EVENTS` e `D_PACKAGES`
+
+```sql
+SELECT e.nome_evento, e.codigo_evento
+FROM d_events e
+JOIN d_packages p ON e.custo_evento = p.custo_pacote;
+```
+
+---
+
+### 2️⃣ Consulta: Salário entre faixa mínima e máxima
+
+```sql
+SELECT f.sobrenome, f.salario, g.nivel_cargo
+FROM funcionarios f
+JOIN faixas_salariais g
+ON f.salario BETWEEN g.salario_min AND g.salario_max;
+```
+
+---
+
+### 3️⃣ Qual condição requer não equijunção?
+
+Uma **não equijunção** é necessária quando os registros de duas tabelas devem ser combinados com base em uma **condição diferente de igualdade**, como `BETWEEN`, `<`, `>`, `!=`.
+
+Exemplo:
+```sql
+f.salario BETWEEN g.salario_min AND g.salario_max
+```
+
+---
+
+### 4️⃣ Reescrevendo a instrução com operadores lógicos
+
+```sql
+WHERE a.ranking >= g.lowest_rank AND a.ranking <= g.highest_rank
+```
+
+---
+
+### 5️⃣ Quando usar alias de tabela?
+
+Use **alias de tabela** quando:
+- Existem várias tabelas na consulta.
+- Há ambiguidade entre nomes de colunas.
+- Para simplificar e abreviar nomes longos.
+
+**Evite** alias se houver apenas uma tabela e não houver ambiguidade.
+
+---
+
+### 6️⃣ Qual tipo de junção usar com faixas de número?
+
+👉 Use **não equijunção** com `BETWEEN`, `>=`, `<=`, etc., para encontrar valores que se encaixam dentro de um intervalo.
+
+---
+
+### 7️⃣ Relatório de clientes e pedidos (junção externa)
+
+```sql
+SELECT c.nome_cliente, p.numero_pedido
+FROM clientes c
+LEFT JOIN pedidos p ON c.id_cliente = p.id_cliente;
+```
+
+> ✅ Isso garante que todos os clientes sejam listados, mesmo sem pedidos.
+
+
+
+
