@@ -1,0 +1,143 @@
+# Questionário SQL – Respostas com Justificativa
+
+---
+
+### 1. Diferença entre HAVING e WHERE
+**Resposta correta:** E) HAVING filtra dados já agrupados.  
+**Justificativa:**  
+A cláusula `HAVING` é usada para filtrar os resultados **após o agrupamento** feito pelo `GROUP BY`, enquanto `WHERE` filtra **antes do agrupamento**.
+
+---
+
+### 2. Junção implícita
+**Resposta correta:** C) SELECT * FROM cliente, conta WHERE cliente.cliente_cod = conta.cliente_cliente_cod;  
+**Justificativa:**  
+Junção implícita ocorre quando usamos múltiplas tabelas na cláusula `FROM` separadas por vírgulas e filtramos a junção com uma condição no `WHERE`.
+
+---
+
+### 3. BETWEEN equivale a:
+**Resposta correta:** B) Uma verificação com dois operadores relacionais (>= e <=).  
+**Justificativa:**  
+`BETWEEN x AND y` é igual a `x >= valor AND valor <= y`.
+
+---
+
+### 4. Uso do operador MINUS no Oracle
+**Resposta correta:** B) Retornar linhas da primeira consulta que não estão na segunda.  
+**Justificativa:**  
+`MINUS` retorna o **conjunto diferença**: o que existe na primeira consulta e não existe na segunda.
+
+---
+
+### 5. Subconsulta com múltiplos resultados
+**Resposta correta:** B) SELECT * FROM cliente WHERE cidade IN (SELECT agencia_cidade FROM agencia);  
+**Justificativa:**  
+O operador `IN` permite comparar com **vários resultados retornados** pela subconsulta.
+
+---
+
+### 6. NVL(saldo, 0)
+**Resposta correta:** B) 0 quando saldo for nulo, e saldo caso contrário.  
+**Justificativa:**  
+`NVL(coluna, valor_substituto)` substitui `NULL` pelo valor indicado.
+
+---
+
+### 7. ROUND(saldo, 1)
+**Resposta correta:** D) Arredonda o número para uma casa decimal.  
+**Justificativa:**  
+`ROUND(número, 1)` arredonda o número para 1 casa decimal.
+
+---
+
+### 8. Uso do CUBE
+**Resposta correta:** B) Gerar todas as combinações de agrupamentos possíveis.  
+**Justificativa:**  
+`CUBE` gera **combinações de agrupamento** para criar relatórios de tabulação cruzada.
+
+---
+
+### 9. Número de caracteres do nome do cliente
+**Resposta correta:** C) LENGTH(cliente_nome)  
+**Justificativa:**  
+`LENGTH` retorna a quantidade de caracteres em um campo texto.
+
+---
+
+### 10. Uso do operador IN
+**Resposta correta:** B) Comparar com uma lista de valores.  
+**Justificativa:**  
+`IN` é usado para verificar se um valor está presente dentro de uma lista.
+
+---
+
+### 11. Função de agregação
+**Resposta correta:** C) Calcular resumos a partir de grupos de dados.  
+**Justificativa:**  
+Funções como `SUM`, `AVG`, `COUNT`, `MAX`, `MIN` são usadas para **agregação de dados**.
+
+---
+
+### 12. SELECT cidade, COUNT(*) FROM cliente GROUP BY cidade;
+**Resposta correta:** A) Contar quantos clientes existem em cada cidade.  
+**Justificativa:**  
+`GROUP BY` agrupa por cidade, `COUNT(*)` conta os clientes por grupo.
+
+---
+
+### 13. Instrução ROLLUP
+**Resposta correta:** B) Obter subtotais e total geral.  
+**Justificativa:**  
+`ROLLUP` gera **subtotais parciais e totais gerais** baseando-se nas colunas agrupadas.
+
+---
+
+### 14. SELECT DISTINCT cidade FROM cliente;
+**Resposta correta:** C) Uma lista sem repetições de cidades.  
+**Justificativa:**  
+`DISTINCT` remove valores duplicados no resultado da consulta.
+
+---
+
+### 15. Consulta com erro de sintaxe
+**Resposta correta:** E) SELECT cidade, COUNT(*) FROM cliente HAVING cidade = 'Niterói';  
+**Justificativa:**  
+`HAVING` é usado com funções de grupo. `cidade = 'Niterói'` deveria estar em um `WHERE`.
+
+---
+
+### 16. Sobre operador UNION
+**Resposta correta:** D) Combinação de linhas distintas de duas consultas.  
+**Justificativa:**  
+`UNION` **combina** os resultados de duas queries e **elimina duplicatas**.
+
+---
+
+### 17. SELECT cliente_nome FROM cliente WHERE cliente_nome LIKE 'M%';
+**Resposta correta:** E) Nomes que começam com a letra "M".  
+**Justificativa:**  
+`LIKE 'M%'` filtra nomes que **começam com M**.
+
+---
+
+### 18. TO_CHAR(data_abertura, 'DD/MM/YYYY')
+**Resposta correta:** C) Converter data em texto formatado.  
+**Justificativa:**  
+`TO_CHAR(data, formato)` transforma a data em string no formato especificado.
+
+---
+
+### 19. SELECT cliente_nome FROM cliente WHERE cidade = 'Niterói';
+**Resposta correta:** C) Apenas linhas com cidade exatamente igual a 'Niterói' serão retornadas.  
+**Justificativa:**  
+O `=` compara valores **exatamente iguais**, inclusive com letras maiúsculas e minúsculas.
+
+---
+
+### 20. Cláusula GROUP BY obrigatória quando:
+**Resposta correta:** D) Uso de funções de agregação combinadas com colunas individuais.  
+**Justificativa:**  
+Se houver uma função de grupo (ex: `COUNT(*)`) **junto com colunas comuns**, é obrigatório usar `GROUP BY`.
+
+---
