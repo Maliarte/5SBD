@@ -1,0 +1,266 @@
+Prefacio
+Finalidade
+• E se você quisesse saber a média de altura de todos
+os alunos? Você poderia gravar uma consulta como esta:
+
+SELECT AVG(height) FROM students;
+
+• Mas e se você quisesse saber a média de altura dos
+alunos com base em seu ano na escola?
+
+• Com o que sabe até agora, você precisaria gravar um
+número de instruções SQL diferentes para obter isso:
+SELECT AVG(height) FROM students WHERE year_in_school = 10;
+SELECT AVG(height) FROM students WHERE year_in_school = 11;
+SELECT AVG(height) FROM students WHERE year_in_school = 12;
+
+E assim por diante!
+
+• Para simplificar problemas como esse com apenas uma
+instrução, use as cláusulas GROUP BY e HAVING
+
+A cláusula GROUP BY é
+usada para dividir as
+linhas em uma tabela
+em grupos menores
+• Em seguida, é possível
+usar as funções de
+grupo para retornar
+informações resumidas
+sobre cada grupo
+
+SELECT department_id, AVG(salary)
+FROM employees
+GROUP BY department_id
+ORDER BY department_id;
+
+DEPARTMENT_ID            AVG(SALARY)
+10                     4400
+20                     9500
+50                     3500
+60                     6400
+80                     10033.3333333333333333
+90                     19333.3333333333333333
+110                    10150
+-                      7000
+
+E se quiséssemos encontrar o salário máximo dos
+funcionários de cada departamento?
+•Usamos a cláusula GROUP BY
+especificando qual coluna
+deve ser usada para
+agrupar as linhas
+
+SELECT MAX(salary)
+FROM employees
+GROUP BY department_id;
+
+
+=======================
+
+1. **HAVING**: Usada para especificar quais grupos devem ser exibidos; restringe os grupos que não atendem aos critérios especificados.
+
+2. **GROUP BY**: Divide as linhas de uma tabela em grupos.
+
+=================================
+1. Construir e executar uma consulta SQL usando GROUP BY
+
+SELECT department_id, COUNT(*) AS num_employees
+FROM employees
+GROUP BY department_id;
+
+2. Construir e executar uma consulta SQL usando GROUP BY … HAVING
+
+SELECT department_id, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department_id
+HAVING AVG(salary) > 50000;
+
+3. Construir e executar GROUP BY em mais de uma coluna
+
+SELECT department_id, job_id, COUNT(*) AS num_employees
+FROM employees
+GROUP BY department_id, job_id;
+
+4. Aninhar funções de grupo
+
+SELECT department_id, MAX(AVG(salary)) AS max_avg_salary
+FROM employees
+GROUP BY department_id;
+
+
+=====================
+
+A consulta SQL fornecida está utilizando as funções `MAX(salary)` e `GROUP BY`, com a cláusula `HAVING` para restringir os resultados a salários superiores a 16.000, e a cláusula `ORDER BY` para ordenar os resultados por sobrenome em ordem decrescente.
+
+Analisando as opções fornecidas:
+
+- **a. Kimberly Grant não aparecerá no conjunto de resultados.**
+  - **Falso**. Kimberly Grant pode aparecer no conjunto de resultados, desde que o salário dela seja superior a 16.000. A cláusula `WHERE` filtra os resultados para sobrenomes começando com "K", mas não há informação suficiente sobre o salário dela especificamente.
+
+- **b. A cláusula GROUP BY tem um erro porque o manager_id não está listado na cláusula SELECT.**
+  - **Verdadeiro**. No `GROUP BY`, todos os campos que não estão em uma função de agregação (como `MAX(salary)`) devem estar na cláusula `SELECT`. O `manager_id` é usado no `GROUP BY`, mas não aparece no `SELECT`, o que causará um erro.
+
+- **c. Somente os salários maiores que 16001 aparecerão no conjunto de resultados.**
+  - **Falso**. A cláusula `HAVING` restringe os resultados a salários maiores que 16.000, mas o valor "16001" não é mencionado explicitamente na consulta.
+
+- **d. Os nomes que iniciam com Ki aparecerão após os que iniciam com Ko.**
+  - **Verdadeiro**. A consulta usa `ORDER BY last_name DESC`, o que significa que os resultados serão ordenados em ordem alfabética decrescente. Portanto, "Ki" aparecerá depois de "Ko", já que a ordem decrescente leva em conta a ordem alfabética reversa.
+
+- **e. Sobrenomes como King e Kochhar serão retornados mesmo se não tiverem salários > 16000.**
+  - **Falso**. A cláusula `HAVING` filtra os resultados para incluir somente aqueles com um salário máximo superior a 16.000. Portanto, se o salário de "King" ou "Kochhar" não for maior que 16.000, eles não aparecerão no conjunto de resultados.
+
+### Resumo das respostas:
+- **a.** Falso
+- **b.** Verdadeiro
+- **c.** Falso
+- **d.** Verdadeiro
+- **e.** Falso
+
+
+
+
+===================
+
+
+### 2. Erros nas consultas SQL e correções
+
+A seguir, vamos identificar os erros nas consultas SQL fornecidas e corrigi-los:
+
+#### a. Consulta com erro:
+```sql
+SELECT manager_id
+FROM employees
+WHERE AVG(salary) < 16000
+GROUP BY manager_id;
+Erro:
+
+Uso incorreto da função agregada no WHERE: A função AVG(salary) deve ser usada com a cláusula HAVING, não com WHERE. O WHERE é utilizado para filtrar linhas antes da agregação, enquanto HAVING é usado para filtrar resultados após a agregação.
+
+Correção:
+
+
+SELECT manager_id
+FROM employees
+GROUP BY manager_id
+HAVING AVG(salary) < 16000;
+Aqui, a função AVG(salary) é usada corretamente com a cláusula HAVING para filtrar os resultados após a agregação dos dados.
+
+b. Consulta com erro:
+
+SELECT cd_number, COUNT(title)
+FROM d_cds
+WHERE cd_number < 93;
+Erro:
+
+Falta de cláusula GROUP BY: Ao usar a função agregada COUNT(title), é necessário agrupar os dados por alguma coluna, como cd_number, pois estamos contando os títulos para cada número de CD.
+
+Correção:
+
+
+SELECT cd_number, COUNT(title)
+FROM d_cds
+WHERE cd_number < 93
+GROUP BY cd_number;
+Agora, os resultados são agrupados por cd_number, permitindo que a função COUNT(title) seja executada corretamente.
+
+c. Consulta com erro:
+
+SELECT ID, MAX(ID), artist AS Artist
+FROM d_songs
+WHERE duration IN('3 min', '6 min', '10 min')
+HAVING ID < 50
+GROUP BY ID;
+Erro:
+
+Ordem incorreta das cláusulas: A cláusula GROUP BY deve vir antes da cláusula HAVING. Além disso, ao usar funções agregadas como MAX(ID), todas as colunas não agregadas precisam ser incluídas na cláusula GROUP BY.
+
+Correção:
+
+
+SELECT ID, MAX(ID), artist AS Artist
+FROM d_songs
+WHERE duration IN('3 min', '6 min', '10 min')
+GROUP BY ID, artist
+HAVING ID < 50;
+Agora, estamos agrupando por ID e artist, e a cláusula HAVING filtra os resultados após a agregação.
+
+d. Consulta com erro:
+
+SELECT loc_type, rental_fee AS Fee
+FROM d_venues
+WHERE id < 100
+GROUP BY "Fee"
+ORDER BY 2;
+Erro:
+
+Uso incorreto do alias na cláusula GROUP BY: No SQL, não podemos usar o alias (Fee) diretamente na cláusula GROUP BY. Precisamos usar o nome real da coluna, que é rental_fee.
+
+Correção:
+
+
+SELECT loc_type, rental_fee AS Fee
+FROM d_venues
+WHERE id < 100
+GROUP BY loc_type, rental_fee
+ORDER BY 2;
+Agora, estamos agrupando por loc_type e rental_fee, e a ordenação será feita pela segunda coluna (neste caso, rental_fee), como indicado pelo ORDER BY 2.
+
+
+
+================
+
+
+### 4. Verdadeiro ou Falso
+
+Indique se as afirmativas a seguir são Verdadeiras ou Falsas:
+
+- **a.** Se você incluir uma função de grupo e quaisquer outras colunas individuais em uma cláusula `SELECT`, cada coluna individual também deverá aparecer na cláusula `GROUP BY`.  
+  **✅ Verdadeiro**  
+  *Explicação:* Quando se utiliza funções de grupo no `SELECT`, todas as demais colunas listadas devem estar presentes na cláusula `GROUP BY`, caso contrário haverá erro de agregação.
+
+- **b.** É possível usar um alias de coluna na cláusula `GROUP BY`.  
+  **❌ Falso**  
+  *Explicação:* A cláusula `GROUP BY` não reconhece aliases definidos no `SELECT`. É necessário usar o nome original da coluna.
+
+- **c.** A cláusula `GROUP BY` sempre contém uma função de grupo.  
+  **❌ Falso**  
+  *Explicação:* A cláusula `GROUP BY` agrupa os dados, mas a função de grupo é opcional. Podemos agrupar dados sem necessariamente aplicar uma função agregada no `SELECT`.
+
+---
+
+### 5. Consulta: Médias salariais máxima e mínima por departamento
+
+```sql
+SELECT department_id,
+       MAX(AVG(salary)) OVER (PARTITION BY department_id) AS max_avg_salary,
+       MIN(AVG(salary)) OVER (PARTITION BY department_id) AS min_avg_salary
+FROM employees
+GROUP BY department_id;
+
+
+===================================
+
+Observação: Caso queira apenas o AVG(salary) agrupado por department_id
+
+SELECT department_id,
+       MAX(salary) AS max_salary,
+       MIN(salary) AS min_salary
+FROM employees
+GROUP BY department_id;
+
+
+
+6. Consulta: Média dos salários máximos de cada departamento
+
+SELECT AVG(max_salary) AS avg_of_max_salaries
+FROM (
+  SELECT department_id, MAX(salary) AS max_salary
+  FROM employees
+  GROUP BY department_id
+);
+
+Explicação:
+
+A subconsulta agrupa os dados por department_id e retorna o salário máximo por departamento.
+A consulta externa calcula a média desses salários máximos.
