@@ -92,5 +92,109 @@ cláusula ON
 • Isso permite especificar uma variedade maior de
 condições de junção
 
+
+
+
 • A cláusula ON também permite usar WHERE para
 restringir as linhas de uma ou ambas as tabelas
+
+================
+
+Prática
+• Comparar e contrastar uma junção interna e uma junção externa
+• Criar e executar uma consulta para usar uma junção externa esquerda
+• Criar e executar uma consulta para usar uma junção externa direita
+• Criar e executar uma consulta para usar uma junção externa completa
+
+📌 JUNÇÃO INTERNA vs JUNÇÕES EXTERNAS
+🔹 JUNÇÃO INTERNA (INNER JOIN)
+Mostra apenas os registros que têm correspondência nas duas tabelas.
+Se um dos lados não tiver correspondência, a linha não aparece.
+
+🔹 JUNÇÃO EXTERNA
+Mostra todos os registros de uma tabela, mesmo que não tenham correspondência na outra.
+
+Pode ser:
+LEFT JOIN – mostra todos os da esquerda, com correspondência ou não.
+RIGHT JOIN – mostra todos os da direita.
+FULL OUTER JOIN – mostra todos de ambos os lados, mesmo sem correspondência.
+
+🧠 RESUMO VISUAL
+
+Tipo de junção	                                    O que retorna?
+INNER JOIN	                                 Apenas registros com correspondência nas duas tabelas
+LEFT OUTER JOIN	                             Todos da esquerda + correspondentes da direita (ou NULL se não tiver)
+RIGHT OUTER JOIN	                           Todos da direita + correspondentes da esquerda (ou NULL se não tiver)
+FULL OUTER JOIN	                              Todos os registros de ambas as tabelas, com NULL onde não houver correspondência
+
+
+🧪 EXEMPLO PRÁTICO
+Tabela funcionarios
+
+id_func	                   nome	                 id_depto
+1	                          Ana	                  10
+2	                          Bruno	                20
+3	                          Carla	                30
+
+Tabela departamentos
+
+id_depto	                      nome_depto
+10	                                 RH
+20	                                 TI
+40	                                 Financeiro
+
+
+✅ INNER JOIN
+
+SELECT f.nome, d.nome_depto
+FROM funcionarios f
+INNER JOIN departamentos d
+ON f.id_depto = d.id_depto;
+🔹 Retorna: Ana (RH), Bruno (TI)
+🔸 Carla e Financeiro ficam de fora (sem correspondência).
+
+✅ LEFT OUTER JOIN
+
+SELECT f.nome, d.nome_depto
+FROM funcionarios f
+LEFT JOIN departamentos d
+ON f.id_depto = d.id_depto;
+
+
+🔹 Retorna:
+
+Ana (RH),
+
+Bruno (TI),
+
+Carla (NULL)
+
+✅ RIGHT OUTER JOIN
+
+SELECT f.nome, d.nome_depto
+FROM funcionarios f
+RIGHT JOIN departamentos d
+ON f.id_depto = d.id_depto;
+
+
+🔹 Retorna:
+
+Ana (RH),
+
+Bruno (TI),
+
+NULL (Financeiro)
+
+✅ FULL OUTER JOIN
+
+SELECT f.nome, d.nome_depto
+FROM funcionarios f
+FULL OUTER JOIN departamentos d
+ON f.id_depto = d.id_depto;
+
+🔹 Retorna:
+
+Ana (RH),
+Bruno (TI),
+Carla (NULL),
+NULL (Financeiro)
