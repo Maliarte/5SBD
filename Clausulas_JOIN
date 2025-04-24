@@ -1,0 +1,96 @@
+Quando você faz junções entre tabelas no SQL, precisa dizer qual coluna conecta uma tabela à outra — é como dizer “essas duas tabelas estão relacionadas por essa informação em comum”.
+
+🤝 O que é uma junção?
+Imagine duas tabelas:
+
+Tabela funcionarios:
+
+funcionario_id	nome	departamento_id
+1	              Ana	   10
+2	              Bruno	 20
+
+
+
+Tabela departamentos:
+
+departamento_id	             nome_departamento
+10	                         RH
+20	                         TI
+
+
+Você quer juntar essas duas tabelas e mostrar o nome do funcionário com o nome do departamento. 
+Você pode fazer isso de duas formas diferentes: com ON ou com USING.
+
+🟨 1. Usando ON (mais flexível)
+Você explicita a relação: tabela1.coluna = tabela2.coluna.
+
+
+SELECT f.nome, d.nome_departamento
+FROM funcionarios f
+JOIN departamentos d
+ON f.departamento_id = d.departamento_id;
+
+
+📝 Aqui você está dizendo: "Junte as tabelas quando o departamento_id de funcionarios for igual ao de departamentos."
+
+✅ Funciona mesmo que os nomes das colunas sejam diferentes nas tabelas!
+
+
+
+🟩 2. Usando USING (mais simples, mas exige nomes iguais)
+Você só pode usar USING se as colunas tiverem o mesmo nome nas duas tabelas. O SQL já entende que é essa a coluna que conecta.
+
+SELECT f.nome, d.nome_departamento
+FROM funcionarios f
+JOIN departamentos d
+USING (departamento_id);
+
+
+📝 Aqui o SQL já sabe que departamento_id existe nas duas tabelas, e vai fazer a junção por essa coluna automaticamente.
+
+⚖️ Comparando ON vs USING
+
+Característica	                            ON	                                  USING
+Pode usar colunas com nomes diferentes	    ✅ Sim	                              ❌ Não
+Sintaxe mais simples	                      ❌ Um pouco mais verbosa	            ✅ Simples
+Coluna repetida na saída	                  ✅ Sim, se selecionar tabela.coluna	  ❌ Não, aparece só uma vez
+Flexibilidade (filtros, múltiplas colunas)	✅ Alta	                              ❌ Menor
+
+🔁 Exemplo real:
+Imagine que em uma tabela o nome da coluna é id_depto e na outra é departamento_id.
+
+Aí você tem que usar ON:
+
+
+SELECT *
+FROM tabela1 t1
+JOIN tabela2 t2
+ON t1.id_depto = t2.departamento_id;
+
+Se as duas colunas forem chamadas departamento_id, aí pode usar o USING:
+
+
+
+SELECT *
+FROM tabela1
+JOIN tabela2
+USING (departamento_id);
+
+
+---
+
+Cláusula ON
+
+• E se as colunas a serem unidas tiverem nomes
+diferentes ou se a junção usar operadores de
+comparação de não igualdade, como <, > ou
+BETWEEN?
+
+• Não podemos usar USING. Em vez disso, usamos uma
+cláusula ON
+
+• Isso permite especificar uma variedade maior de
+condições de junção
+
+• A cláusula ON também permite usar WHERE para
+restringir as linhas de uma ou ambas as tabelas
